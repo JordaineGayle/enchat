@@ -2,7 +2,7 @@
   <div :key="contactId" class="contact-area"
        @click="$router.push(`/conversation/${contactId}`)">
     <div class="contact">
-      <vs-button to="/contacts" color="#ffffff" flat transparent>
+      <vs-button to="/contacts" color="#ffffff" transparent>
         <i class='bx bx-arrow-back'></i>
       </vs-button>
       <vs-avatar size="60" history history-gradient circle>

@@ -53,6 +53,8 @@ export default {
   methods: {
     loginUser()
     {
+      let authEvent = new CustomEvent('authenticated', {detail: true});
+
       this.isLoading = true;
       this.$axios.$post(
         '/api/Users/Login',
@@ -61,6 +63,7 @@ export default {
         .then(res => {
           this.isLoading = false;
           localStorage.setItem("token",res.Token);
+          window.dispatchEvent(authEvent);
           this.$router.push('/contacts')
         })
         .catch(err => {
