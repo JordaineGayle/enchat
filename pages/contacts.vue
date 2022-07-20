@@ -1,0 +1,94 @@
+<template>
+  <div class="main">
+    <div class='nav'>
+      <p class="head-3 p-2">Contacts</p>
+      <div class="search p-2">
+        <vs-input color="#FA003F" shadow placeholder="search" style="width: 100%">
+          <template #icon>
+            <i class='bx bx-search-alt-2' ></i>
+          </template>
+        </vs-input>
+      </div>
+    </div>
+    <ContactList v-if="!isLoading && contacts.length > 0" :contacts="contacts"/>
+    <div class="no-contacts title-2 text-center"
+         v-else-if="!isLoading && contacts.length <= 0">Sorry! no contacts yet<br/>Unable to start a conversation</div>
+  </div>
+</template>
+
+<script>
+import ContactList from "../components/ContactListComponent";
+export default {
+  created() {
+    this.token = localStorage.getItem('token');
+    if(!this.token)
+      this.$router.push("/");
+
+    this.loading = this.$vs.loading({
+      type: 'circles',
+      color: '#FA003F'
+    });
+    this.getUsers()
+  },
+  components: {ContactList},
+  data(){
+    return{
+      isLoading: true,
+      token: undefined,
+      loading: null,
+      contacts: [],
+    }
+  },
+  methods: {
+    getUsers()
+    {
+      this.$axios.$get(
+        '/api/Users/GetContacts',
+        {
+          headers: {
+            ApiKey: this.token
+          }
+        }
+      )
+      .then(res => {
+        this.contacts = res;
+        this.closeLoading();
+      })
+      .catch(err => {
+        console.log(err.errors)
+        this.closeLoading();
+      });
+    },
+    closeLoading() {
+      this.isLoading = false;
+      this.loading.close();
+    }
+}
+}
+
+</script>
+
+<style scoped>
+
+.main{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.nav{
+  line-height: 0;
+}
+
+.no-contacts{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #cbcaca!important;
+}
+
+
+</style>
