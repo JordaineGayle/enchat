@@ -28,6 +28,8 @@ export default {
     console.log("route",this.contactId)
     this.getContact(this.contactId);
     window.dispatchEvent(new CustomEvent('authenticated', {detail: true}));
+
+    console.log("connection state: ",this.$sig.state)
   },
   data(){
     return{

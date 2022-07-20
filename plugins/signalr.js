@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import {HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 const sig = {};
 
 let connection = new HubConnectionBuilder()
@@ -9,11 +9,14 @@ let connection = new HubConnectionBuilder()
   .build();
 
 window.addEventListener('authenticated', (e) =>{
-  console.log("auth event fired: ",e);
-  connection.baseUrl = `https://e2e.azurewebsites.net/e2echat?apiKey=${localStorage.getItem('token')}`;
-  connection.start().then(con => {
-    console.log("connection",con);
-  }).catch(e => console.log("Error while connecting...."+e.message));
+  if(connection.state !== HubConnectionState.Connected)
+  {
+    console.log("auth event fired: ",e);
+    connection.baseUrl = `https://e2e.azurewebsites.net/e2echat?apiKey=${localStorage.getItem('token')}`;
+    connection.start().then(con => {
+      console.log("connection",connection);
+    }).catch(e => console.log("Error while connecting...."+e.message));
+  }
 })
 
 Vue.prototype.$sig = connection;
