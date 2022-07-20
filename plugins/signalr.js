@@ -8,9 +8,9 @@ let connection = new HubConnectionBuilder()
   .withAutomaticReconnect()
   .build();
 
-window.on('authenticated', (e) =>{
+window.addEventListener('authenticated', (e) =>{
   console.log("auth event fired: ",e);
-  connection.baseUrl = `https://e2e.azurewebsites.net/e2echat?${localStorage.getItem('token')}`;
+  connection.baseUrl = `https://e2e.azurewebsites.net/e2echat?apiKey=${localStorage.getItem('token')}`;
   connection.start().then(con => {
     console.log("connection",con);
   }).catch(e => console.log("Error while connecting...."+e.message));

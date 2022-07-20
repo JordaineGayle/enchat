@@ -28,7 +28,9 @@ export default {
       type: 'circles',
       color: '#FA003F'
     });
-    this.getUsers()
+    this.getUsers();
+
+    window.dispatchEvent(new CustomEvent('authenticated', {detail: true}));
   },
   components: {ContactList},
   data(){
