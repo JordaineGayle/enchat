@@ -27,11 +27,14 @@ export default {
       color: '#FA003F'
     });
     this.contactId = this.$route.params.id;
-    console.log("route",this.contactId)
+
     this.getContact(this.contactId);
+
     window.dispatchEvent(new CustomEvent('authenticated', {detail: true}));
 
     console.log("connection state: ",this.$sig.state)
+
+    this.$sig.invoke("StartConversation", this.contactId);
   },
   data(){
     return{
@@ -40,21 +43,8 @@ export default {
       loading: null,
       contactId: null,
       contact: null,
-      messages:
-      [
-        {
-          Message: 'life is so great',
-          Date: new Date(),
-          Sender: "230415dd2d44465cafec7da94cb13ce9",
-          Receiver: "56ce1249b8d34aa18067fcc0ae1c4aae"
-        },
-        {
-          Message: 'Yea men its def great',
-          Date: new Date(),
-          Receiver: "230415dd2d44465cafec7da94cb13ce9",
-          Sender: "56ce1249b8d34aa18067fcc0ae1c4aae"
-        }
-      ]
+      conversationResponse: null,
+      messages: []
     }
   },
   components: {ConversationComponent, ContactComponent},

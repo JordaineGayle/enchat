@@ -56,6 +56,7 @@ const Cryptography = {
     }
 
     Vue.prototype.decrypt = async (privateKey,cipher) => {
+      let dec = new TextDecoder();
       const tempkey = JSON.parse(atob(privateKey));
       const key = await window.crypto.subtle.importKey("jwk",tempkey,{
         name: "RSA-OAEP",
@@ -72,7 +73,12 @@ const Cryptography = {
         cipher
       )
 
-      return data;
+
+      console.log("Cipher to be Decrypted : ", cipher)
+      console.log("Decrypted Cipher: ", data)
+      console.log("Decoded Cipher: ", dec.decode(data))
+
+      return dec.decode(data);
     }
   },
 }

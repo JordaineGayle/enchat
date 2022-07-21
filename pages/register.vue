@@ -73,6 +73,8 @@ export default {
 
       this.registerRequest.PublicKey = keys.publicKey;
 
+      localStorage.setItem("privateKey", keys.privateKey);
+
       this.isLoading = true;
       this.$axios.$post(
         '/api/Users/Register',
