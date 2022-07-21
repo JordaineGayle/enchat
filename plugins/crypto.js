@@ -2,83 +2,84 @@ import Vue from 'vue'
 
 const Cryptography = {
   install(Vue) {
-
-
-
     Vue.prototype.generateKey = async () => {
-      let keyPair = await window.crypto.subtle.generateKey(
+      const keyPair = await window.crypto.subtle.generateKey(
         {
-          name: "RSA-OAEP",
+          name: 'RSA-OAEP',
           modulusLength: 4096,
           publicExponent: new Uint8Array([1, 0, 1]),
-          hash: "SHA-256"
+          hash: 'SHA-256',
         },
         true,
-        ["encrypt", "decrypt"]
-      );
+        ['encrypt', 'decrypt']
+      )
 
       const publicKey = await window.crypto.subtle.exportKey(
-        "jwk",
+        'jwk',
         keyPair.publicKey
-      );
+      )
 
       const privateKey = await window.crypto.subtle.exportKey(
-        "jwk",
+        'jwk',
         keyPair.privateKey
-      );
+      )
 
       return {
-        "publicKey": btoa(JSON.stringify(privateKey)),
-        "privateKey": btoa(JSON.stringify(publicKey))
-      };
-
+        publicKey: btoa(JSON.stringify(publicKey)),
+        privateKey: btoa(JSON.stringify(privateKey)),
+      }
     }
 
-    Vue.prototype.encrypt = async (publicKey,data) => {
-      const tempkey = JSON.parse(atob(publicKey));
-      const key = await window.crypto.subtle.importKey("jwk",tempkey,{
-        name: "RSA-OAEP",
-        modulusLength: 4096,
-        publicExponent: new Uint8Array([1, 0, 1]),
-        hash: "SHA-256"
-      },true,["encrypt", "decrypt"]);
+    Vue.prototype.encrypt = async (publicKey, data) => {
+      const tempkey = JSON.parse(atob(publicKey))
+      const key = await window.crypto.subtle.importKey(
+        'jwk',
+        tempkey,
+        {
+          name: 'RSA-OAEP',
+          modulusLength: 4096,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: 'SHA-256',
+        },
+        false,
+        ['encrypt']
+      )
 
-      let enc = new TextEncoder();
-      let encodedData = enc.encode(btoa(JSON.stringify(data)));
+      const enc = new TextEncoder()
+      const encodedData = enc.encode(btoa(JSON.stringify(data)))
       const ciperText = await window.crypto.subtle.encrypt(
         {
-          name: "RSA-OAEP"
+          name: 'RSA-OAEP',
         },
         key,
         encodedData
       )
-      return ciperText;
+      return ciperText
     }
 
-    Vue.prototype.decrypt = async (privateKey,cipher) => {
-      let dec = new TextDecoder();
-      const tempkey = JSON.parse(atob(privateKey));
-      const key = await window.crypto.subtle.importKey("jwk",tempkey,{
-        name: "RSA-OAEP",
-        modulusLength: 4096,
-        publicExponent: new Uint8Array([1, 0, 1]),
-        hash: "SHA-256"
-      },true,["encrypt", "decrypt"]);
+    Vue.prototype.decrypt = async (privateKey, cipherText) => {
+      const tempkey = JSON.parse(atob(privateKey))
+      const key = await window.crypto.subtle.importKey(
+        'jwk',
+        tempkey,
+        {
+          name: 'RSA-OAEP',
+          modulusLength: 4096,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: 'SHA-256',
+        },
+        true,
+        ['decrypt']
+      )
 
       const data = await window.crypto.subtle.decrypt(
         {
-          name: "RSA-OAEP"
+          name: 'RSA-OAEP',
         },
         key,
-        cipher
+        cipherText
       )
-
-
-      console.log("Cipher to be Decrypted : ", cipher)
-      console.log("Decrypted Cipher: ", data)
-      console.log("Decoded Cipher: ", dec.decode(data))
-
-      return dec.decode(data);
+      return data
     }
   },
 }
