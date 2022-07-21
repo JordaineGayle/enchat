@@ -1,7 +1,7 @@
 <template>
   <div id="message" :class="message.Sender !== userId ? 'gradient' : 'no-gradient'">
-    <p class="body-1">{{message.Message}}xddddddddddddddddddddddddddddddddddddddddddddddddddddddd</p>
-    <p class="caption">{{humanTime(message.Date)}}</p>
+    <p class="body-2">{{message.Message}}</p>
+    <p class="caption" :style="message.Sender !== userId ? 'align-self: flex-end' : 'align-self: flex-start' ">{{humanTime(message.Date)}}</p>
   </div>
 </template>
 
@@ -29,15 +29,17 @@ export default {
 <style scoped>
 
 #message{
-  padding: 0.5em;
+  padding: 0.8em;
   margin: 0.6em;
   border-radius: 10px;
   width: 80%;
   word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  line-height: 0;
 }
 
 .gradient {
-
   text-align: left;
   color: white;
   background: rgb(250,0,63);
