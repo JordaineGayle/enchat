@@ -340,4 +340,25 @@ html, body{
   width: 100%;
   background-color: #f3f3f3;
 }
+
+
+
+::-webkit-scrollbar {
+  width: 10px!important;
+}
+
+::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-left: 0px solid #dadada;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FA003F;
+  border: solid 0px #e6e6e6;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FA003F;
+}
 </style>

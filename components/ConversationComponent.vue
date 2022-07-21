@@ -1,6 +1,6 @@
 <template>
   <div class="conversation-area">
-    <div class="messages-area">
+    <div id="messageSpace" class="messages-area">
       <MessageComponent
         v-for="(message, i) in messages"
         :key="i"
@@ -9,6 +9,7 @@
     </div>
     <div class="action">
       <vs-input
+        v-on:keyup.enter="sendMessage"
         v-model="msg"
         style="width: 100% !important"
         placeholder="Mesage..."
@@ -49,7 +50,6 @@ export default {
       if(messagesStr){
         this.messages = JSON.parse(messagesStr);
       }
-
     })
 
     this.$sig.on('MessageReceived', async (channel, data) => {
@@ -62,6 +62,9 @@ export default {
         this.messages.push(message)
       }
     })
+  },
+  updated() {
+    this.scrollContents()
   },
   methods: {
     async sendMessage() {
@@ -86,6 +89,10 @@ export default {
       localStorage.setItem(this.conversationResponse.ConversationId,JSON.stringify(storedMessages));
 
     },
+    scrollContents(){
+      const element = document.getElementById("messageSpace");
+      element.scrollTop = element.scrollHeight;
+    }
   },
 }
 </script>
@@ -104,6 +111,8 @@ export default {
   padding: 1em;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  height: 400px;
 }
 
 .action {
