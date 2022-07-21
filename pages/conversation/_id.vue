@@ -29,6 +29,8 @@ export default {
 
     this.contactId = this.$route.params.id;
 
+    console.log("contacid: ",this.contactId)
+
     this.getContact(this.contactId);
 
     window.dispatchEvent(new CustomEvent('authenticated', {detail: true}));

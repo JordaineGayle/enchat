@@ -47,36 +47,7 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      theme_color: '#FA003F',
-      background_color: '#ffffff',
-      display: 'fullscreen',
-      scope: '/',
-      start_url: '/',
-      name: 'ENCHAT',
-      short_name: 'ECHAT',
-      description: 'This is an end to end chant application',
-      icons: [
-        {
-          src: '/icon-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: '/icon-256x256.png',
-          sizes: '256x256',
-          type: 'image/png',
-        },
-        {
-          src: '/icon-384x384.png',
-          sizes: '384x384',
-          type: 'image/png',
-        },
-        {
-          src: '/icon-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-      ],
+      lang: 'en'
     },
   },
 
