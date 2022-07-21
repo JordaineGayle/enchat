@@ -34,16 +34,22 @@ import MessageComponent from './MessageComponent'
 export default {
   name: 'ConversationComponent',
   components: { MessageComponent },
-  props: ['messages'],
   data() {
     return {
       conversationResponse: null,
       msg: '',
+      messages: [],
     }
   },
   created() {
     this.$sig.on('ConversationStarted', (data) => {
       this.conversationResponse = data
+      const messagesStr = localStorage.getItem(this.conversationResponse.ConversationId);
+      this.messages = [];
+      if(messagesStr){
+        this.messages = JSON.parse(messagesStr);
+      }
+
     })
 
     this.$sig.on('MessageReceived', async (channel, data) => {
@@ -71,6 +77,14 @@ export default {
       const encoded = encode(encrypted)
       await this.$sig.invoke('SendMessage', this.$route.params.id, encoded)
       this.msg = null
+      let messagesStr = localStorage.getItem(this.conversationResponse.ConversationId);
+      let storedMessages = [];
+      if(messagesStr){
+        storedMessages = JSON.parse(messagesStr);
+      }
+      storedMessages.push(message);
+      localStorage.setItem(this.conversationResponse.ConversationId,JSON.stringify(storedMessages));
+
     },
   },
 }

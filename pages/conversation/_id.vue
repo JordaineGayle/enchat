@@ -16,6 +16,7 @@
 <script>
 import ContactComponent from "../../components/ConversationContactCompnent";
 import ConversationComponent from "../../components/ConversationComponent";
+import {HubConnectionState} from "@microsoft/signalr";
 export default {
   created() {
     this.token = localStorage.getItem('token');
@@ -26,6 +27,7 @@ export default {
       type: 'circles',
       color: '#FA003F'
     });
+
     this.contactId = this.$route.params.id;
 
     this.getContact(this.contactId);
@@ -34,7 +36,15 @@ export default {
 
     console.log("connection state: ",this.$sig.state)
 
-    this.$sig.invoke("StartConversation", this.contactId);
+    if(this.$sig.state === HubConnectionState.Connected){
+      this.$sig.invoke("StartConversation", this.contactId);
+    }else{
+      window.addEventListener("connectionReady", (e) =>{
+        this.$sig.invoke("StartConversation", this.contactId);
+      })
+    }
+
+
   },
   data(){
     return{
