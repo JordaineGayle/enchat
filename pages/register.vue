@@ -65,15 +65,21 @@ export default {
     }
   },
   methods: {
-    registerUser()
+    async registerUser()
     {
-      let authEvent = new CustomEvent('authenticated', {detail: true});
+
+
+      const keys = await this.generateKey();
+
+      this.registerRequest.PublicKey = keys.publicKey;
+
       this.isLoading = true;
       this.$axios.$post(
         '/api/Users/Register',
         this.registerRequest
       )
       .then(res => {
+        let authEvent = new CustomEvent('authenticated', {detail: true});
         console.log(res)
         this.isLoading = false;
         localStorage.setItem("token",res.Token);
