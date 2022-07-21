@@ -3,13 +3,11 @@
     <div class='nav' >
       <ContactComponent
         v-if="!isLoading"
-        :contact-id="contact.id"
-        :show-divider="false"
-        :contact-name="contact.Name"
-        :contact-email="contact.Email"
+        :contact="contact"
+        :is-typing="isTyping"
       />
     </div>
-    <ConversationComponent :messages="messages"/>
+    <ConversationComponent />
   </div>
 </template>
 
@@ -17,6 +15,7 @@
 import ContactComponent from "../../components/ConversationContactCompnent";
 import ConversationComponent from "../../components/ConversationComponent";
 import {HubConnectionState} from "@microsoft/signalr";
+import { AvatarGenerator } from 'random-avatar-generator';
 export default {
   created() {
     this.token = localStorage.getItem('token');
@@ -45,16 +44,29 @@ export default {
     }
 
 
+    this.$sig.on('ConversationStarted', (data) => {
+      this.conversationResponse = data
+    })
+
+    this.$sig.on('IsTyping', (channel, message) => {
+      this.isTyping = true;
+      setTimeout(()=>{
+        this.isTyping = false
+      },3000)
+    })
+
+
   },
   data(){
     return{
       isLoading: true,
+      isTyping: false,
       token: undefined,
       loading: null,
       contactId: null,
       contact: null,
       conversationResponse: null,
-      messages: []
+      generator: new AvatarGenerator()
     }
   },
   components: {ConversationComponent, ContactComponent},
@@ -70,6 +82,7 @@ export default {
       )
         .then(res => {
           this.contact = res;
+          this.contact.Avatar = this.generator.generateRandomAvatar();
           this.closeLoading();
         })
         .catch(err => {

@@ -10,6 +10,7 @@
     <div class="action">
       <vs-input
         v-on:keyup.enter="sendMessage"
+        @keyup="isTyping"
         v-model="msg"
         style="width: 100% !important"
         placeholder="Mesage..."
@@ -92,6 +93,9 @@ export default {
     scrollContents(){
       const element = document.getElementById("messageSpace");
       element.scrollTop = element.scrollHeight;
+    },
+    isTyping(){
+      this.$sig.invoke("Typing",this.conversationResponse.ConversationId,this.$route.params.id)
     }
   },
 }
