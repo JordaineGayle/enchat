@@ -9,11 +9,13 @@
         :contact-email="contact.Email"
       />
     </div>
+    <ConversationComponent :messages="messages"/>
   </div>
 </template>
 
 <script>
 import ContactComponent from "../../components/ConversationContactCompnent";
+import ConversationComponent from "../../components/ConversationComponent";
 export default {
   created() {
     this.token = localStorage.getItem('token');
@@ -37,10 +39,25 @@ export default {
       token: undefined,
       loading: null,
       contactId: null,
-      contact: null
+      contact: null,
+      messages:
+      [
+        {
+          Message: 'life is so great',
+          Date: new Date(),
+          Sender: "230415dd2d44465cafec7da94cb13ce9",
+          Receiver: "56ce1249b8d34aa18067fcc0ae1c4aae"
+        },
+        {
+          Message: 'Yea men its def great',
+          Date: new Date(),
+          Receiver: "230415dd2d44465cafec7da94cb13ce9",
+          Sender: "56ce1249b8d34aa18067fcc0ae1c4aae"
+        }
+      ]
     }
   },
-  components: {ContactComponent},
+  components: {ConversationComponent, ContactComponent},
   methods: {
     getContact(id){
       this.$axios.$get(

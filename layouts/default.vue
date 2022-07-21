@@ -330,6 +330,10 @@ html, body{
   width:400px;
 }
 
+.vs-input{
+  width: 100%;
+}
+
 
 .divider{
   height: 1px;
